@@ -5,14 +5,14 @@ import {
 	getAllProductsHandler,
 	getProductHandler,
 	updateProductHandler,
-} from "@src/modules/product/product.controller";
-import validateResource from "@src/middleware/zodValidation";
+} from "./product.controller";
+import validateResource from "./../../middleware/zodValidation";
 import {
 	createProductValidation,
 	deleteProductValidation,
 	getProductValidation,
 	updateProductValidation,
-} from "@src/modules/product/product.validation";
+} from "./product.validation";
 const router = Router();
 
 router
