@@ -1,0 +1,7 @@
+!**/.eslintrc*
+node_modules*
+build
+.gitignore
+*.md
+*.log
+*.lock
