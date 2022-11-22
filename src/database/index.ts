@@ -27,6 +27,18 @@ export async function connectTestMongoDb() {
 	}
 }
 
+export async function clearTestMongoDb() {
+	try {
+		const collections = await mongoose.connection.db.collections();
+		for (const connection of collections) {
+			await connection.deleteMany({});
+		}
+	} catch (e) {
+		log.error("Unable to clear TEST database");
+		process.exit(1);
+	}
+}
+
 export async function disconnectTestMongoDb() {
 	try {
 		await mongoose.disconnect();
