@@ -242,4 +242,53 @@ describe("product", () => {
 			});
 		});
 	});
+
+	/*
+		? update product scenarios
+  */
+	describe("update product route", () => {
+		describe("given the productId cast error failed", () => {
+			it("should return a 500", async () => {
+				const productId = "asd";
+				const { statusCode } = await supertest(app).put(
+					`/api/products/${productId}`,
+				);
+				expect(statusCode).toBe(500);
+			});
+		});
+
+		describe("given the productId does not exist", () => {
+			it("should return a 404", async () => {
+				const productId = "63786439be8ca060c32d1c48";
+				const { statusCode } = await supertest(app).put(
+					`/api/products/${productId}`,
+				);
+				expect(statusCode).toBe(404);
+			});
+		});
+
+		describe("given the productId does exist", () => {
+			it("should return a 200 and validate response body", async () => {
+				const product = await createProduct(createProductPayload);
+
+				const { statusCode, body } = await supertest(app).put(
+					`/api/products/${product._id}`,
+				);
+
+				expect(statusCode).toBe(200);
+				expect(body).toEqual(
+					expect.objectContaining({
+						message: "Product updated successfully",
+						product: expect.objectContaining({
+							_id: expect.any(String),
+							createdAt: expect.any(String),
+							updatedAt: expect.any(String),
+							name: expect.any(String),
+							description: expect.any(String),
+						}),
+					}),
+				);
+			});
+		});
+	});
 });
