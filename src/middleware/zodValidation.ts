@@ -12,7 +12,7 @@ const validateResource = (schema: AnyZodObject) => {
 			next();
 		} catch (e) {
 			if (e instanceof ZodError) {
-				return res.status(400).send(e.errors);
+				return res.status(400).send({ errors: e.errors });
 			}
 			return res.status(400).send("request validation error");
 		}
