@@ -1,5 +1,9 @@
 import supertest from "supertest";
-import { connectTestMongoDb, disconnectTestMongoDb } from "./../database";
+import {
+	clearTestMongoDb,
+	connectTestMongoDb,
+	disconnectTestMongoDb,
+} from "./../database";
 import createServer from "./../server";
 import { CreateProductInput } from "./../modules/product/product.validation";
 import { createProduct } from "./../modules/product/product.service";
@@ -9,11 +13,23 @@ const app = createServer();
 describe("product", () => {
 	beforeAll(async () => await connectTestMongoDb());
 	afterAll(async () => await disconnectTestMongoDb());
+	afterEach(async () => await clearTestMongoDb());
 
 	const createProductPayload: CreateProductInput["body"] = {
 		name: "Test product",
 		description: "Testing product's description",
 	};
+
+	const createProductsPayload: CreateProductInput["body"][] = [
+		{
+			name: "Test product 1",
+			description: "Testing product 1's description",
+		},
+		{
+			name: "Test product 2",
+			description: "Testing product 2's description",
+		},
+	];
 
 	/*
 		? Create product scenarios
@@ -113,7 +129,7 @@ describe("product", () => {
 	});
 
 	/*
-		get product scenarios
+		? get product scenarios
   */
 	describe("get product route", () => {
 		describe("given the productId cast error failed", () => {
@@ -153,6 +169,36 @@ describe("product", () => {
 						...createProductPayload,
 					},
 				});
+			});
+		});
+	});
+
+	/*
+		? get products scenarios
+  */
+	describe("get products route", () => {
+		describe("get all products", () => {
+			it("should return a 200 and validate response body", async () => {
+				for await (const singleProductPayload of createProductsPayload) {
+					await createProduct(singleProductPayload);
+				}
+
+				const { statusCode, body } = await supertest(app).get("/api/products");
+
+				expect(statusCode).toBe(200);
+				expect(body).toEqual(
+					expect.objectContaining({
+						products: expect.arrayContaining([
+							expect.objectContaining({
+								_id: expect.any(String),
+								createdAt: expect.any(String),
+								updatedAt: expect.any(String),
+								name: expect.any(String),
+								description: expect.any(String),
+							}),
+						]),
+					}),
+				);
 			});
 		});
 	});
