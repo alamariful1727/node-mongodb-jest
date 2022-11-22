@@ -1,7 +1,8 @@
 import supertest from "supertest";
 import { connectTestMongoDb, disconnectTestMongoDb } from "./../database";
-import createServer from "../server";
-import { CreateProductInput } from "@src/modules/product/product.validation";
+import createServer from "./../server";
+import { CreateProductInput } from "./../modules/product/product.validation";
+import { createProduct } from "./../modules/product/product.service";
 
 const app = createServer();
 
@@ -9,15 +10,15 @@ describe("product", () => {
 	beforeAll(async () => await connectTestMongoDb());
 	afterAll(async () => await disconnectTestMongoDb());
 
+	const createProductPayload: CreateProductInput["body"] = {
+		name: "Test product",
+		description: "Testing product's description",
+	};
+
 	/*
 		? Create product scenarios
-s	*/
+	*/
 	describe("create product route", () => {
-		const createProductPayload: CreateProductInput["body"] = {
-			name: "Test product",
-			description: "Testing product's description",
-		};
-
 		describe("given empty body", () => {
 			it("should return a 400 and validate error response", async () => {
 				const { body, statusCode } = await supertest(app)
@@ -113,7 +114,7 @@ s	*/
 
 	/*
 		get product scenarios
-s	*/
+  */
 	describe("get product route", () => {
 		describe("given the productId cast error failed", () => {
 			it("should return a 500", async () => {
@@ -132,6 +133,26 @@ s	*/
 					`/api/products/${productId}`,
 				);
 				expect(statusCode).toBe(404);
+			});
+		});
+
+		describe("given the productId does exist", () => {
+			it("should return a 200 and validate response body", async () => {
+				const product = await createProduct(createProductPayload);
+
+				const { statusCode, body } = await supertest(app).get(
+					`/api/products/${product._id}`,
+				);
+
+				expect(statusCode).toBe(200);
+				expect(body).toEqual({
+					product: {
+						_id: expect.any(String),
+						createdAt: expect.any(String),
+						updatedAt: expect.any(String),
+						...createProductPayload,
+					},
+				});
 			});
 		});
 	});
