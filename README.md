@@ -7,6 +7,7 @@ _It's a continuation of [node-mongodb-typescript-eslint-prettier](https://github
 ## Key features:
 
 - Jest testing. ✅
+- Github actions. ✅
 - Express framework. ✅
 - MongoDB database connection, schema creation and validation. ✅
 - Zod validation. (Request **body**, **params** and **query** validation) ✅
