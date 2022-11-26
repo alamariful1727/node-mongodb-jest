@@ -10,7 +10,7 @@ import { createProduct } from "./../modules/product/product.service";
 
 const app = createServer();
 
-describe("product", () => {
+describe("product - mongodb-memory-server", () => {
 	beforeAll(async () => await connectTestMongoDb());
 	afterAll(async () => await disconnectTestMongoDb());
 	afterEach(async () => await clearTestMongoDb());
