@@ -23,20 +23,39 @@ describe("Service: Product", () => {
 			? Create product scenarios
 		*/
 	describe("createProduct", () => {
-		it("should return the product payload", async () => {
-			const createProductServiceMock = jest
-				.spyOn(ProductService, "createProduct")
-				// @ts-ignore
-				.mockReturnValueOnce(createProductResponse);
+		describe("given empty body", () => {
+			it("should return a 400", async () => {
+				const createProductServiceMock = jest
+					.spyOn(ProductService, "createProduct")
+					// @ts-ignore
+					.mockReturnValueOnce(createProductResponse);
 
-			const { statusCode, body } = await supertest(app)
-				.post("/api/products")
-				.send(createProductInput);
+				const { statusCode } = await supertest(app)
+					.post("/api/products")
+					.send({});
 
-			expect(statusCode).toBe(201);
-			expect(body.product).toEqual(createProductResponse);
+				expect(statusCode).toBe(400);
+				expect(createProductServiceMock).not.toHaveBeenCalled();
+			});
+		});
+		describe("given complete body", () => {
+			it("should return a 200 and the product payload", async () => {
+				const createProductServiceMock = jest
+					.spyOn(ProductService, "createProduct")
+					// @ts-ignore
+					.mockReturnValueOnce(createProductResponse);
 
-			expect(createProductServiceMock).toHaveBeenCalledWith(createProductInput);
+				const { statusCode, body } = await supertest(app)
+					.post("/api/products")
+					.send(createProductInput);
+
+				expect(statusCode).toBe(201);
+				expect(body.product).toEqual(createProductResponse);
+
+				expect(createProductServiceMock).toHaveBeenCalledWith(
+					createProductInput,
+				);
+			});
 		});
 	});
 });
