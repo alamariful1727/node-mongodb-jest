@@ -38,6 +38,36 @@ describe("Service: Product", () => {
 				expect(createProductServiceMock).not.toHaveBeenCalled();
 			});
 		});
+		describe("given incomplete body - only name", () => {
+			it("should return a 400", async () => {
+				const createProductServiceMock = jest
+					.spyOn(ProductService, "createProduct")
+					// @ts-ignore
+					.mockReturnValueOnce(createProductResponse);
+
+				const { statusCode } = await supertest(app)
+					.post("/api/products")
+					.send({ name: createProductInput.name });
+
+				expect(statusCode).toBe(400);
+				expect(createProductServiceMock).not.toHaveBeenCalled();
+			});
+		});
+		describe("given incomplete body - only description", () => {
+			it("should return a 400", async () => {
+				const createProductServiceMock = jest
+					.spyOn(ProductService, "createProduct")
+					// @ts-ignore
+					.mockReturnValueOnce(createProductResponse);
+
+				const { statusCode } = await supertest(app)
+					.post("/api/products")
+					.send({ description: createProductInput.description });
+
+				expect(statusCode).toBe(400);
+				expect(createProductServiceMock).not.toHaveBeenCalled();
+			});
+		});
 		describe("given complete body", () => {
 			it("should return a 200 and the product payload", async () => {
 				const createProductServiceMock = jest
