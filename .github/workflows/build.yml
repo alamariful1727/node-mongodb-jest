@@ -4,8 +4,9 @@
 name: NODE-MONGODB-JEST CI
 
 on:
-  push:
-    branches: ["main"]
+  # ? You can uncomment this for production ready applications
+  # push:
+  #   branches: ["main"]
   pull_request:
     branches: ["main"]
 
