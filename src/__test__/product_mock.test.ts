@@ -27,6 +27,7 @@ describe("Service: Product", () => {
 			it("should return a 400", async () => {
 				const createProductServiceMock = jest
 					.spyOn(ProductService, "createProduct")
+					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 					// @ts-ignore
 					.mockReturnValueOnce(createProductResponse);
 
@@ -42,6 +43,7 @@ describe("Service: Product", () => {
 			it("should return a 400", async () => {
 				const createProductServiceMock = jest
 					.spyOn(ProductService, "createProduct")
+					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 					// @ts-ignore
 					.mockReturnValueOnce(createProductResponse);
 
@@ -57,6 +59,7 @@ describe("Service: Product", () => {
 			it("should return a 400", async () => {
 				const createProductServiceMock = jest
 					.spyOn(ProductService, "createProduct")
+					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 					// @ts-ignore
 					.mockReturnValueOnce(createProductResponse);
 
@@ -72,6 +75,7 @@ describe("Service: Product", () => {
 			it("should return a 200 and the product payload", async () => {
 				const createProductServiceMock = jest
 					.spyOn(ProductService, "createProduct")
+					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 					// @ts-ignore
 					.mockReturnValueOnce(createProductResponse);
 
